@@ -220,15 +220,13 @@ export default function PubgSquadTracker() {
         nextPlayers[playerIndex] = cycleStatus(nextPlayers[playerIndex]);
 
         const activePlayers = nextPlayers.slice(0, team.rosterSize);
+        const aliveCount = activePlayers.filter((status) => status === "alive").length;
         const allDead = activePlayers.every((status) => status === "dead");
-        const allKnocked = activePlayers.every((status) => status === "knocked");
 
-        if (allKnocked) {
+        if (aliveCount === 0) {
           return {
             ...team,
-            players: nextPlayers.map((status, idx) =>
-              idx < team.rosterSize ? "dead" : status
-            ),
+            players: nextPlayers.map((status, idx) => (idx < team.rosterSize ? "dead" : status)),
             eliminated: true,
             previousStateBeforeElimination: null,
           };
